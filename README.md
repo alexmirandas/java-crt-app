@@ -5,25 +5,29 @@ Este proyecto contiene una aplicación Java simple que sirve contenido a través
 ## Prerrequisitos
 
 1. **Java JDK** instalado localmente.
-2. **Docker** instalado y en funcionamiento.
-3. **Kubernetes** para pruebas locales.
-4. **kubectl** para la interacción con el clúster de Kubernetes.
-5. **OpenSSL** para generar certificados autofirmados.
+2. **Gradle** instalado localmente.
+3. **Docker** instalado y en funcionamiento.
+4. **Kubernetes** para pruebas locales.
+5. **kubectl** para la interacción con el clúster de Kubernetes.
+6. **OpenSSL** para generar certificados autofirmados.
 
 ## Pasos
 
 ### 1. Crear la Aplicación Java
 
 1. Crea un directorio para la aplicación, por ejemplo, `MyJavaApp/`.
-2. Dentro del directorio, crea la estructura `src/` y agrega un archivo `Main.java` con el codigo para probar el cert:
-3. Compila el proyecto y crea un archivo JAR:
-
+2. Dentro del directorio, crea la estructura `src/main/java/` y agrega un archivo `Main.java` con el codigo para probar el cert:
+3. Compila el proyecto con gradle
    ```bash
-   mkdir -p output
-   javac -d output src/Main.java
-   cd output
-   jar cfe MyJavaApp.jar Main Main.class
+   gradle build
    ```
+
+Si lo deseas puedes probar localmente con el siguiente comando
+```bash
+java -jar build/libs/your-project-1.0-SNAPSHOT.jar
+```
+
+Asegúrate de reemplazar your-project con el nombre real de tu proyecto y ajustar la versión según sea necesario
 
 ### 2. Contruye la imagen Docker
 

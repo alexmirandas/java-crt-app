@@ -1,0 +1,25 @@
+// build.gradle setting up
+plugins {
+    id 'java'
+}
+
+group 'com.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {}
+
+jar {
+    manifest {
+        attributes(
+            'Main-Class': 'Main'
+        )
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8' // Establece la codificación de archivos fuente
+}
