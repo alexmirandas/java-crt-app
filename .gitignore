@@ -1,5 +1,13 @@
-# certs
+# IDE Files
+.vscode
+
+# Certs
 **/*.crt
 **/*.key
 **/*.pem
 **/*.p12
+
+# Compile Files
+.gradle
+build
+**/*.jar

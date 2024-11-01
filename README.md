@@ -24,7 +24,7 @@ Este proyecto contiene una aplicación Java simple que sirve contenido a través
 
 Si lo deseas puedes probar localmente con el siguiente comando
 ```bash
-java -jar build/libs/your-project-1.0-SNAPSHOT.jar
+java -jar build/libs/MyJavaApp-1.0.jar
 ```
 
 Asegúrate de reemplazar your-project con el nombre real de tu proyecto y ajustar la versión según sea necesario
