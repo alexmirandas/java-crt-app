@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-java-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-java-app
+  template:
+    metadata:
+      labels:
+        app: my-java-app
+    spec:
+      initContainers:
+        - name: init-certificates
+          image: openjdk:17-slim
+          command: ['sh', '-c', 'cp /usr/local/openjdk-17/lib/security/cacerts /etc/keystore/cacerts && keytool -importcert -file /etc/certs/my-cert.crt -alias my-cert -keystore /etc/keystore/cacerts -storepass changeit -noprompt']
+          volumeMounts:
+            - name: certs
+              mountPath: /etc/certs
+            - name: keystore
+              mountPath: /etc/keystore
+      containers:
+        - name: java-app
+          image: local/my-java-app:1.0
+          # command: ["java", "-jar", "./java-app/output/MyJavaApp.jar"]
+          # env:
+          #   - name: JAVA_OPTS
+          #     value: "-Djavax.net.ssl.trustStore=/etc/keystore/cacerts -Djavax.net.ssl.trustStorePassword=changeit"
+          ports:
+            - containerPort: 8443
+          volumeMounts:
+            - name: certs
+              mountPath: /etc/certs
+            - name: keystore
+              mountPath: /etc/keystore
+      volumes:
+        - name: certs
+          configMap:
+            name: cert-cfg
+        - name: keystore
+          emptyDir: {}
