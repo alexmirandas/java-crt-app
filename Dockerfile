@@ -2,7 +2,7 @@ FROM openjdk:17-slim
 
 WORKDIR /app
 
-COPY java-app/output/MyJavaApp.jar /app/MyJavaApp.jar
+COPY MyJavaApp/build/libs/MyJavaApp-v1.0.jar /app/MyJavaApp.jar
 
 ENV JAVA_OPTS="-Djavax.net.ssl.trustStore=/etc/keystore/cacerts -Djavax.net.ssl.trustStorePassword=changeit"
 

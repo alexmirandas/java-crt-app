@@ -1,13 +1,27 @@
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: my-java-app
+# spec:
+#   selector:
+#     app: my-java-app
+#   ports:
+#     - protocol: TCP
+#       port: 8443
+#       targetPort: 8443
+#       nodePort: 30443
+#   type: NodePort
+
+
 apiVersion: v1
 kind: Service
 metadata:
   name: my-java-app
+  namespace: test
 spec:
+  type: LoadBalancer
+  ports:
+    - port: 8443
+      targetPort: 8443
   selector:
     app: my-java-app
-  ports:
-    - protocol: TCP
-      port: 8443
-      targetPort: 8443
-      nodePort: 30443
-  type: NodePort

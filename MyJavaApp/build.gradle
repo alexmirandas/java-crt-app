@@ -12,6 +12,13 @@ repositories {
 
 dependencies {}
 
+ // compilando usando Java 17
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
 jar {
     manifest {
         attributes(
