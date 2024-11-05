@@ -13,30 +13,42 @@ import java.nio.file.Paths;
 import java.security.KeyStore;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
-        // Carga el keystore con el certificado y la clave privada
-        char[] passphrase = "changeit".toCharArray(); // Contraseña del keystore
+    public static void main(String[] args) {
+        try {
+            // Carga el keystore con el certificado y la clave privada
+            char[] passphrase = "changeit".toCharArray(); // Contraseña del keystore
 
-        KeyStore keyStore = KeyStore.getInstance("JKS");
-        keyStore.load(Files.newInputStream(Paths.get("/etc/keystore/cacerts")), passphrase);
+            KeyStore keyStore = KeyStore.getInstance("JKS");
+            keyStore.load(Files.newInputStream(Paths.get("/etc/keystore/cacerts")), passphrase);
 
-        KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
-        kmf.init(keyStore, passphrase);
+            // Verificación de que el keystore contiene la clave privada y el certificado
+            String alias = "server";  // Alias del certificado en el keystore
+            if (!keyStore.containsAlias(alias) || !keyStore.isKeyEntry(alias)) {
+                throw new Exception("Error: No se encontró una clave privada o certificado válido en el alias '" + alias + "'");
+            }
 
-        TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
-        tmf.init(keyStore);
+            KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+            kmf.init(keyStore, passphrase);
 
-        SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+            tmf.init(keyStore);
 
-        // Configura el servidor HTTPS
-        HttpsServer server = HttpsServer.create(new InetSocketAddress(8443), 0);
-        server.setHttpsConfigurator(new com.sun.net.httpserver.HttpsConfigurator(sslContext));
-        server.createContext("/hello", new HelloHandler());
-        server.setExecutor(null); // Usa un executor predeterminado
-        server.start();
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
 
-        System.out.println("Servidor HTTPS iniciado en https://localhost:8443/hello");
+            // Configura el servidor HTTPS
+            HttpsServer server = HttpsServer.create(new InetSocketAddress(8443), 0);
+            server.setHttpsConfigurator(new com.sun.net.httpserver.HttpsConfigurator(sslContext));
+            server.createContext("/hello", new HelloHandler());
+            server.setExecutor(null); // Usa un executor predeterminado
+            server.start();
+
+            System.out.println("Servidor HTTPS iniciado en https://localhost:8443/hello");
+
+        } catch (Exception e) {
+            System.err.println("Error al iniciar el servidor HTTPS: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     static class HelloHandler implements HttpHandler {

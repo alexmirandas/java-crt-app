@@ -1,5 +1,5 @@
 # IDE Files
-.vscode
+.vscode/
 
 # Certs
 **/*.crt
