@@ -42,7 +42,9 @@ docker build . -t local/my-java-app:1.0 -f Dockerfile
 Usa el siguiente comando para generar un certificado autofirmado de prueba:
 
 ```bash
-openssl req -x509 -newkey rsa:4096 -sha256 -days 365 -nodes -keyout ./certs/my-cert.key -out ./certs/my-cert.crt -subj "/CN=my-java-app"
+#openssl req -x509 -newkey rsa:4096 -sha256 -days 365 -nodes -keyout ./certs/my-cert.key -out ./certs/my-cert.crt -subj "/CN=my-java-app"
+
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout server.key -out server.crt -subj "/C=US/ST=MyCountry/L=MyCity/O=MyOrganization/CN=localhost"
 ```
 
 Esto generará dos archivos:
